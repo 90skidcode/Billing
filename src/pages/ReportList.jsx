@@ -28,6 +28,7 @@ import Header from "../partials/Header";
 import BillPrintList from "./BillPrintList";
 import Datepicker from "../partials/actions/Datepicker";
 import BillReportPrintList from "./BillReportPrintList";
+import DashboardCard14 from "../partials/dashboard/DashboardCard14";
 
 function GlobalFilter({
   preGlobalFilteredRows,
@@ -74,7 +75,7 @@ function ReportList(props) {
   }, [type]);
 
   const filterList = [{ name: 'Daywise', value: 'Daywise' }, { name: 'Weekwise', value: 'Weekwise' }, { name: 'Monthwise', value: 'Monthwise' }, { name: 'Yearwise', value: 'Yearwise' }, { name: 'Between', value: 'Between' }]
-  
+
   function formatDate(date) {
     var d = new Date(date),
       month = '' + (d.getMonth() + 1),
@@ -96,7 +97,7 @@ function ReportList(props) {
       let t = document.getElementById('date-range').value;
       t = t.split('to');
       tabledata['from_date'] = formatDate(t[0]);
-      tabledata['to_date'] = formatDate(t[1] ? t[1]: t[0]);
+      tabledata['to_date'] = formatDate(t[1] ? t[1] : t[0]);
     }
     setDetails([]);
     PostApi(tabledata, '', props).then((res) => {
@@ -167,7 +168,6 @@ function ReportList(props) {
     };
     PostApi(deleteData, '', props)
       .then((res) => {
-        console.log(res);
         toast.success("Deleted Successfully");
         PostApi(tabledata, '', props).then((res) => {
           let tableresponce = res.responcePostData.data.result;
@@ -253,280 +253,283 @@ function ReportList(props) {
         setTimeout(() => {
           if (flag) window.print();
           else setModalPopUpInvoiceFlag("");
-        }, 300);       
+        }, 300);
       }
     );
   }
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex">
+    <div className="flex overflow-y-hidden">
       <Toaster position="top-right" reverseOrder={false} />
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       {/* Content area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-200  ">
+      <div className="relative flex flex-col flex-1 no-scrollbar overflow-y-auto overflow-x-hidden bg-slate-200  ">
         {/*  Site header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main>
-          <div className="p-1 w-full max-w-9xl mx-auto">
+        <main className=" no-scrollbar overflow-y-auto h-[90vh]">
+          <div className="p-1 w-full max-w-9xl mx-auto ">
             <div className="col-span-12 sm:col-span-10 print:hidden m-5">
               <div className="flex justify-between flex-wrap">
                 <div className="text-primary-900 text-3xl font-bold capitalize">
                   <h1>{type} ✨ </h1>
                 </div>
               </div>
-              <div className="bg-white shadow-lg rounded-sm border border-gray-200 mt-5 overflow-auto">
-                <header className="px-5 py-4 border-b border-gray-100 p-4 flex flex-wrap justify-between ">
-                  <h2 className="text-gray-800 text-base font-semibold justify-items-start capitalize">
-                    All {type}
-                    <span className="text-base font-semibold text-slate-500">
-                      {" - " + data.length}
-                    </span>
-                  </h2>
-                  <GlobalFilter
-                    preGlobalFilteredRows={preGlobalFilteredRows}
-                    globalFilter={state.globalFilter}
-                    setGlobalFilter={setGlobalFilter}
-                  />
-                  {/* Right: Actions */}
-                  <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                    {/* Filter button */}
-                    <select className="form-input pl-2 text-slate-500 hover:text-slate-600 font-medium focus:border-slate-300" name="range" id="range">
-                      {
-                        filterList.map((e) => (
-                          <option value={e.value} key={e.value}>{e.name}</option>
-                        ))
-                      }
-                    </select>
-                    {/* Datepicker built with flatpickr */}
-                    <Datepicker />
-                    {/* Add view button */}
-                    <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => getReport()}>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                      </svg>
-                      <span className="hidden xs:block ml-2">Filter</span>
-                    </button>
-                  </div>
-                </header>
+              <div className="grid grid-cols-12 gap-6">
+                <div className="col-span-9 bg-white shadow-lg rounded-sm border border-gray-200 mt-0 overflow-auto">
+                  <header className="px-5 py-4 border-b border-gray-100 p-4 flex flex-wrap justify-between ">
+                    <h2 className="text-gray-800 text-base font-semibold justify-items-start capitalize">
+                      All {type}
+                      <span className="text-base font-semibold text-slate-500">
+                        {" - " + data.length}
+                      </span>
+                    </h2>
+                    <GlobalFilter
+                      preGlobalFilteredRows={preGlobalFilteredRows}
+                      globalFilter={state.globalFilter}
+                      setGlobalFilter={setGlobalFilter}
+                    />
+                    {/* Right: Actions */}
+                    <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                      {/* Filter button */}
+                      <select className="form-input pl-2 text-slate-500 hover:text-slate-600 font-medium focus:border-slate-300" name="range" id="range">
+                        {
+                          filterList.map((e) => (
+                            <option value={e.value} key={e.value}>{e.name}</option>
+                          ))
+                        }
+                      </select>
+                      {/* Datepicker built with flatpickr */}
+                      <Datepicker />
+                      {/* Add view button */}
+                      <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => getReport()}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
+                        <span className="hidden xs:block ml-2">Filter</span>
+                      </button>
+                    </div>
+                  </header>
 
-                <table
-                  className="w-full divide-y divide-gold-600"
-                  {...getTableProps()}
-                >
-                  <thead className="bg-slate-200 text-slate-500">
-                    {headerGroups.map((headerGroup) => (
-                      <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                          <th
-                            className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
-                            {...column.getHeaderProps(
-                              column.getSortByToggleProps()
-                            )}
-                          >
-                            {column.render("Header")}
-                            <span>
-                              {column.isSorted
-                                ? column.isSortedDesc
-                                  ? " 🔽"
-                                  : " 🔼"
-                                : ""}
-                            </span>
-                          </th>
-                        ))}
-                        <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                          Action
-                        </th>
-                      </tr>
-                    ))}
-                  </thead>
-                  <tbody
-                    className="bg-white divide-y divide-gray-200"
-                    {...getTableBodyProps()}
+                  <table
+                    className="w-full divide-y divide-gold-600"
+                    {...getTableProps()}
                   >
-                    {page.map((row, i) => {
-                      prepareRow(row);
-                      return (
-                        <tr {...row.getRowProps()}>
-                          {row.cells.map((cell) => {
-                            return (
-                              <td
-                                className="px-6 py-2 whitespace-nowrap text-slate-500 text-sm "
-                                {...cell.getCellProps([
-                                  {
-                                    className: cell.column.className,
-                                    style: cell.column.style,
-                                  },
-                                ])}
-                              >
-                                {cell.render("Cell")}
-                              </td>
-                            );
-                          })}
-
-                          <td className="px-6 py-2 whitespace-nowrap text-slate-500 text-sm  flex flex-row">
-                            {type === "invoice" ? (
-                              <>
-                                {" "}
-                                <ClipboardCheckIcon
-                                  height={15}
-                                  className=" text-blue-500 cursor-pointer text-left mr-2"
-                                  xlinkTitle="invoice"
-                                  onClick={() =>
-                                    PrintInvoice(
-                                      row.original.pos_invoice_no,
-                                      false
-                                    )
-                                  }
-                                ></ClipboardCheckIcon>
-                                <PrinterIcon
-                                  height={15}
-                                  className=" text-blue-500 cursor-pointer text-left mr-2"
-                                  xlinkTitle="invoice"
-                                  onClick={() =>
-                                    PrintInvoice(
-                                      row.original.pos_invoice_no,
-                                      true
-                                    )
-                                  }
-                                ></PrinterIcon>
-                                {(document.getElementById('range').value == 'Daywise') ? <TrashIcon
-                                  height={15}
-                                  className=" text-red-500 cursor-pointer text-left"
-                                  onClick={() => {
-                                    DeleteData(row, true);
-                                  }}
-                                  value={""}
-                                ></TrashIcon> : ''}
-                              </>
-                            ) : (
-                              <>
-                                <div
-                                  id={Math.random()}
-                                  onClick={() =>
-                                    navigate(
-                                      "/list/" +
-                                      type +
-                                      "/" +
-                                      row?.original["pos_" + type + "_code"]
-                                    )
-                                  }
-                                >
-                                  <PencilAltIcon
-                                    height={15}
-                                    className=" text-blue-500 cursor-pointer text-left mx-2"
-                                  ></PencilAltIcon>
-                                </div>
-                                <TrashIcon
-                                  height={15}
-                                  className=" text-red-500 cursor-pointer text-left"
-                                  onClick={() => {
-                                    DeleteData(row, false);
-                                  }}
-                                  value={""}
-                                ></TrashIcon>
-                              </>
-                            )}
-                          </td>
+                    <thead className="bg-slate-200 text-slate-500">
+                      {headerGroups.map((headerGroup) => (
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                          {headerGroup.headers.map((column) => (
+                            <th
+                              className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"
+                              {...column.getHeaderProps(
+                                column.getSortByToggleProps()
+                              )}
+                            >
+                              {column.render("Header")}
+                              <span>
+                                {column.isSorted
+                                  ? column.isSortedDesc
+                                    ? " 🔽"
+                                    : " 🔼"
+                                  : ""}
+                              </span>
+                            </th>
+                          ))}
+                          <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
+                            Action
+                          </th>
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-                <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                  <div className="flex-1 flex justify-between sm:hidden">
-                    <div
-                      onClick={() => previousPage()}
-                      disabled={!canPreviousPage}
-                      href="#"
-                      className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                      ))}
+                    </thead>
+                    <tbody
+                      className="bg-white divide-y divide-gray-200"
+                      {...getTableBodyProps()}
                     >
-                      Previous
-                    </div>
-                    <div
-                      onClick={() => nextPage()}
-                      disabled={!canNextPage}
-                      href="#"
-                      className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    >
-                      Next
-                    </div>
-                  </div>
-                  <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                      <p className="text-sm text-gray-700">
-                        Showing Page{" "}
-                        <span className="font-medium">{pageIndex + 1}</span> of{" "}
-                        <span className="font-medium">
-                          {pageOptions.length}
-                        </span>
-                      </p>
-                    </div>
-                    <div>
-                      <nav
-                        className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                        aria-label="Pagination"
+                      {page.map((row, i) => {
+                        prepareRow(row);
+                        return (
+                          <tr {...row.getRowProps()}>
+                            {row.cells.map((cell) => {
+                              return (
+                                <td
+                                  className="px-6 py-2 whitespace-nowrap text-slate-500 text-sm "
+                                  {...cell.getCellProps([
+                                    {
+                                      className: cell.column.className,
+                                      style: cell.column.style,
+                                    },
+                                  ])}
+                                >
+                                  {cell.render("Cell")}
+                                </td>
+                              );
+                            })}
+
+                            <td className="px-6 py-2 whitespace-nowrap text-slate-500 text-sm  flex flex-row">
+                              {type === "invoice" ? (
+                                <>
+                                  {" "}
+                                  <ClipboardCheckIcon
+                                    height={15}
+                                    className=" text-blue-500 cursor-pointer text-left mr-2"
+                                    xlinkTitle="invoice"
+                                    onClick={() =>
+                                      PrintInvoice(
+                                        row.original.pos_invoice_no,
+                                        false
+                                      )
+                                    }
+                                  ></ClipboardCheckIcon>
+                                  <PrinterIcon
+                                    height={15}
+                                    className=" text-blue-500 cursor-pointer text-left mr-2"
+                                    xlinkTitle="invoice"
+                                    onClick={() =>
+                                      PrintInvoice(
+                                        row.original.pos_invoice_no,
+                                        true
+                                      )
+                                    }
+                                  ></PrinterIcon>
+                                  {(document.getElementById('range').value == 'Daywise') ? <TrashIcon
+                                    height={15}
+                                    className=" text-red-500 cursor-pointer text-left"
+                                    onClick={() => {
+                                      DeleteData(row, true);
+                                    }}
+                                    value={""}
+                                  ></TrashIcon> : ''}
+                                </>
+                              ) : (
+                                <>
+                                  <div
+                                    id={Math.random()}
+                                    onClick={() =>
+                                      navigate(
+                                        "/list/" +
+                                        type +
+                                        "/" +
+                                        row?.original["pos_" + type + "_code"]
+                                      )
+                                    }
+                                  >
+                                    <PencilAltIcon
+                                      height={15}
+                                      className=" text-blue-500 cursor-pointer text-left mx-2"
+                                    ></PencilAltIcon>
+                                  </div>
+                                  <TrashIcon
+                                    height={15}
+                                    className=" text-red-500 cursor-pointer text-left"
+                                    onClick={() => {
+                                      DeleteData(row, false);
+                                    }}
+                                    value={""}
+                                  ></TrashIcon>
+                                </>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                    <div className="flex-1 flex justify-between sm:hidden">
+                      <div
+                        onClick={() => previousPage()}
+                        disabled={!canPreviousPage}
+                        href="#"
+                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
                       >
-                        <div
-                          onClick={() => gotoPage(0)}
-                          disabled={!canPreviousPage}
-                          href="#"
-                          className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                        Previous
+                      </div>
+                      <div
+                        onClick={() => nextPage()}
+                        disabled={!canNextPage}
+                        href="#"
+                        className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                      >
+                        Next
+                      </div>
+                    </div>
+                    <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                      <div>
+                        <p className="text-sm text-gray-700">
+                          Showing Page{" "}
+                          <span className="font-medium">{pageIndex + 1}</span> of{" "}
+                          <span className="font-medium">
+                            {pageOptions.length}
+                          </span>
+                        </p>
+                      </div>
+                      <div>
+                        <nav
+                          className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                          aria-label="Pagination"
                         >
-                          <span className="sr-only">Previous</span>
+                          <div
+                            onClick={() => gotoPage(0)}
+                            disabled={!canPreviousPage}
+                            href="#"
+                            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                          >
+                            <span className="sr-only">Previous</span>
 
-                          <ChevronDoubleLeftIcon
-                            className="h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        </div>
-                        <div
-                          onClick={() => previousPage()}
-                          disabled={!canPreviousPage}
-                          href="#"
-                          className="relative inline-flex items-center px-2 py-2  border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                        >
-                          <span className="sr-only">Previous</span>
-                          <ChevronLeftIcon
-                            className="h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        </div>
+                            <ChevronDoubleLeftIcon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <div
+                            onClick={() => previousPage()}
+                            disabled={!canPreviousPage}
+                            href="#"
+                            className="relative inline-flex items-center px-2 py-2  border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                          >
+                            <span className="sr-only">Previous</span>
+                            <ChevronLeftIcon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          </div>
 
-                        <div
-                          onClick={() => nextPage()}
-                          disabled={!canNextPage}
-                          href="#"
-                          className="relative inline-flex items-center px-2 py-2  border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                        >
-                          <span className="sr-only">Next</span>
-                          <ChevronRightIcon
-                            className="h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        </div>
-                        <div
-                          onClick={() => gotoPage(pageCount - 1)}
-                          disabled={!canNextPage}
-                          href="#"
-                          className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                        >
-                          <span className="sr-only">Next</span>
-                          <ChevronDoubleRightIcon
-                            className="h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        </div>
-                      </nav>
+                          <div
+                            onClick={() => nextPage()}
+                            disabled={!canNextPage}
+                            href="#"
+                            className="relative inline-flex items-center px-2 py-2  border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                          >
+                            <span className="sr-only">Next</span>
+                            <ChevronRightIcon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <div
+                            onClick={() => gotoPage(pageCount - 1)}
+                            disabled={!canNextPage}
+                            href="#"
+                            className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                          >
+                            <span className="sr-only">Next</span>
+                            <ChevronDoubleRightIcon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          </div>
+                        </nav>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <DashboardCard14 details={details} />
               </div>
             </div>
             <DeleteModal></DeleteModal>
             <BillReportPrintList
-  fullbillDetails={fullbillDetails}
+              fullbillDetails={fullbillDetails}
               billDetails={billDetails}
             ></BillReportPrintList>
           </div>

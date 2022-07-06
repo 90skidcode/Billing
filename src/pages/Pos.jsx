@@ -26,7 +26,7 @@ function Pos(props) {
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       {/* Content area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-200">
+      <div className="relative flex flex-col flex-1  overflow-y-auto overflow-x-hidden bg-slate-200">
         <main>
           <div className="p-1 w-full max-w-9xl mx-auto">
             {/* Cards */}

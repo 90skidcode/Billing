@@ -1,9 +1,6 @@
 import React from "react";
 import svsqr from "../images/svs-qr.png";
 function BillReportPrintList({ billDetails, fullbillDetails }) {
-  console.log('==================fullbillDetails==================');
-  console.log(fullbillDetails);
-  console.log('====================================');
   const calculateGST = (value) => {
     let cost = 0;
     value.forEach((element) => {

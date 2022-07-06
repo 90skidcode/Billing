@@ -134,7 +134,6 @@ function ProductList({ tempproductList, settempproductList, productList }) {
   };
 
   useEffect(() => {
-    console.log();
   }, [flag])
 
   const billCheck = (bill) => {
@@ -208,7 +207,7 @@ function ProductList({ tempproductList, settempproductList, productList }) {
           />
         </header>
         <div className="grow">
-          <div className="grow items-center border border-slate-100 text-xs p-2 overflow-auto h-[90vh]">
+          <div className="grow items-center border border-slate-100 text-xs p-2 no-scrollbar overflow-y-auto h-[90vh]">
             <div className="grid grid-cols-12 gap-2">
               {tempproductList.map((e) => (
                 <div

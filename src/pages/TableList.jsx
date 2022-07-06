@@ -149,7 +149,6 @@ function TableList(props) {
     };
     PostApi(deleteData,'',props)
       .then((res) => {
-        console.log(res);
         toast.success("Deleted Successfully");
         PostApi(tabledata).then((res) => {
           let tableresponce = res.responcePostData.data.result["pos_" + type];

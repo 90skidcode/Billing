@@ -31,7 +31,7 @@ function CategoryList({
   }
 
   return (
-    <div className="col-span-full md:col-span-2 bg-white shadow-lg rounded-sm border border-slate-200 print:hidden">
+    <div className="col-span-full md:col-span-2 bg-white shadow-lg rounded-sm border border-slate-200 print:hidden no-scrollbar overflow-y-auto h-[98vh]">
       {/* <header className="p-1 border-b border-slate-100">
         <input
           type="text"

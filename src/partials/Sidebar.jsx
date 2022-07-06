@@ -35,7 +35,6 @@ function Sidebar({
   });
 
   useEffect(() => {
-    console.log(">>>>>>sdsdasd>>>>");
     localStorage.setItem('sidebar-expanded', sidebarExpanded);
     if (sidebarExpanded) {
       document.querySelector('body').classList.add('sidebar-expanded');
