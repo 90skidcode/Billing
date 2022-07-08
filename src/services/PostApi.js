@@ -1,6 +1,5 @@
 import axios from "axios";
 import { UtilsJson } from "../utils/UtilsJson";
-import { useLocation } from 'react-router-dom';
 async function PostApi(data, page, props) {
     if (props) {
         props.setPageLoaderCounter(props.pageLoaderCounter + 1);

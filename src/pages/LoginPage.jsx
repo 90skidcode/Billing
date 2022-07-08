@@ -40,7 +40,7 @@ export default function LoginPage(props) {
         <div className="max-w-md w-full p-10 bg-slate-100 space-y-8 rounded-sm">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              POS SVS
+              POS Chendur
             </h2>
           </div>
           <form

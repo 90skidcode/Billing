@@ -41,21 +41,21 @@ function DashboardCard01(props) {
         clip: 20,
       },
       // Gray line
-      {
-        data: [
-          732, 610, 610, 504, 504, 504, 349,
-          349, 504, 342, 504, 610, 391, 192,
-          154, 273, 191, 191, 126, 263, 349,
-          252, 423, 622, 470, 532,
-        ],
-        borderColor: tailwindConfig().theme.colors.slate[300],
-        borderWidth: 2,
-        tension: 0,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: tailwindConfig().theme.colors.slate[300],
-        clip: 20,
-      },
+      // {
+      //   data: [
+      //     732, 610, 610, 504, 504, 504, 349,
+      //     349, 504, 342, 504, 610, 391, 192,
+      //     154, 273, 191, 191, 126, 263, 349,
+      //     252, 423, 622, 470, 532,
+      //   ],
+      //   borderColor: tailwindConfig().theme.colors.slate[300],
+      //   borderWidth: 2,
+      //   tension: 0,
+      //   pointRadius: 0,
+      //   pointHoverRadius: 3,
+      //   pointBackgroundColor: tailwindConfig().theme.colors.slate[300],
+      //   clip: 20,
+      // },
     ],
   };
   const [count, setCount] = useState(0);
@@ -75,13 +75,20 @@ function DashboardCard01(props) {
       setCount(tableresponce);
       setFlag(flag ? false : true);
     });
+
+    
   }
 
   useEffect(() => {
-    
-  }, [flag])
+    let   data = {"list_key":"Commonreport","range":"Daywise","month_val":"6","year_val":"2022"};
+    PostApi(data).then((res) => {
+      console.log('====================================');
+      console.log(res);
+      console.log('====================================');
+    });
+  }, [flag]);
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white shadow-lg rounded-sm border border-slate-200">
+    <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-3 bg-white shadow-lg rounded-sm border border-slate-200">
       <div className="px-5 pt-5">
         <header className="flex justify-between items-start mb-2">
           {/* Icon */}

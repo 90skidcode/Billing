@@ -318,9 +318,18 @@ function ProductList({ tempproductList, settempproductList, productList }) {
                         <div className="text-center text-black font-bold">
                           {
                             console.log(currentProduct.pos_products_code === key.code &&
-                              currentProduct.varity_code === key.varity_code, currentProduct.pos_products_code, '  >>>>> ', key.code, '  >>>>varity_code> ',
-                              currentProduct.varity_code, key.varity_code, currentProduct)
+                              currentProduct.varity_code === key.varity_code)
                           }
+                          {
+                            console.log('====================================')
+                          }
+                          {
+                            console.log(currentProduct.pos_products_code, '   ', key.code, '  varity_code ',
+                              currentProduct.varity_code, key.varity_code, currentProduct)
+                          }{
+                            console.log('====================================')
+                          }
+
                           <input
                             type="number"
                             name={key.name}
