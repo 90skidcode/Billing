@@ -20,6 +20,12 @@ import DashboardCard12 from '../partials/dashboard/DashboardCard12';
 import DashboardCard13 from '../partials/dashboard/DashboardCard13';
 import Banner from '../partials/Banner';
 import PostApi from '../Services/PostApi';
+import DashboardCard071 from '../partials/dashboard/DashboardCard071';
+import DashboardCard072 from '../partials/dashboard/DashboardCard072';
+
+import DashboardCard073 from '../partials/dashboard/DashboardCard073';
+import DashboardCard074 from '../partials/dashboard/DashboardCard074';
+import DashboardCard081 from '../partials/dashboard/DashboardCard081';
 
 function Dashboard() {
 
@@ -62,10 +68,15 @@ function Dashboard() {
               {JSON.parse(sessionStorage.getItem('details'))[0].pos_user_branch == 'All' ? <>
                 <DashboardCard02 branchList={branchList} setBranchList={setBranchList} />
                 <DashboardCard03 branchList={branchList} setBranchList={setBranchList} />
-              </>
-                : ''}
-              <DashboardCard13 />
-             
+                <DashboardCard13 />
+                <DashboardCard08 />
+                <DashboardCard081 />
+                {/* <DashboardCard07 />
+                <DashboardCard071 />
+                <DashboardCard072 />
+                <DashboardCard073 />
+                <DashboardCard074 /> */}
+              </> : ''}
             </div>
 
           </div>

@@ -15,9 +15,10 @@ function LineChart02({
   width,
   height
 }) {
+
   const canvas = useRef(null);
   const legend = useRef(null);
-
+ 
   useEffect(() => {
     const ctx = canvas.current;
     // eslint-disable-next-line no-unused-vars
@@ -124,6 +125,7 @@ function LineChart02({
         },
       }],
     });
+    console.log("data", chart);
     return () => chart.destroy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

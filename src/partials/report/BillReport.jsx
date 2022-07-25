@@ -19,31 +19,23 @@ import {
   PrinterIcon,
 } from "@heroicons/react/outline";
 
-import { TableJsonHeaderList } from "../JSON/TableJson";
-import Sidebar from "../partials/Sidebar";
-import PostApi from "../Services/PostApi";
+import { TableJsonHeaderList } from "../../JSON/TableJson";
+import PostApi from "../../services/PostApi";
 import toast, { Toaster } from "react-hot-toast";
-import BillList from "./BillList";
-import Header from "../partials/Header";
-import BillPrintList from "./BillPrintList";
-import Datepicker from "../partials/actions/Datepicker";
-import BillReportPrintList from "./BillReportPrintList";
-import DashboardCard14 from "../partials/dashboard/DashboardCard14";
+import BillList from "../../pages/BillList";
+import Header from "../Header";
+import Datepicker from "../actions/Datepicker";
+import BillReportPrintList from "../../pages/BillReportPrintList";
+import DashboardCard14 from "../dashboard/DashboardCard14";
+import Sidebar from "../Sidebar";
 
 function GlobalFilter({
-  preGlobalFilteredRows,
   globalFilter,
-  setGlobalFilter,
 }) {
-  const count = preGlobalFilteredRows.length;
   const [value, setValue] = React.useState(globalFilter);
-  const onChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 200);
   !JSON.parse(sessionStorage.getItem('details')) ? location.href = '/login' : '';
   return (
     <div className=" text-slate-600">
-
       {/* Search
       <input
         className="mt-1h-8 shadow-sm h-8 px-3 rounded sm:text-sm border border-slate-300 hover:border-slate-500 outline-none"
@@ -58,7 +50,7 @@ function GlobalFilter({
   );
 }
 
-function ReportList(props) {
+function BillReport(props) {
   const { type } = useParams();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -74,19 +66,18 @@ function ReportList(props) {
     });
   }, [type]);
 
-  const filterList = [{ name: 'Daywise', value: 'Daywise' }, { name: 'Weekwise', value: 'Weekwise' }, { name: 'Monthwise', value: 'Monthwise' }, { name: 'Yearwise', value: 'Yearwise' }, { name: 'Between', value: 'Between' }]
-
+  var filterList = [{ name: 'Daywise', value: 'Daywise' }];
+  if(JSON.parse(sessionStorage.getItem('details'))[0].pos_user_type === '1')
+    filterList = [{ name: 'Daywise', value: 'Daywise' }, { name: 'Weekwise', value: 'Weekwise' }, { name: 'Monthwise', value: 'Monthwise' }, { name: 'Yearwise', value: 'Yearwise' }, { name: 'Between', value: 'Between' }]
   function formatDate(date) {
     var d = new Date(date),
       month = '' + (d.getMonth() + 1),
       day = '' + d.getDate(),
       year = d.getFullYear();
-
     if (month.length < 2)
       month = '0' + month;
     if (day.length < 2)
       day = '0' + day;
-
     return [year, month, day].join('-');
   }
 
@@ -114,13 +105,6 @@ function ReportList(props) {
     setDeleteCurrent([]);
   }
 
-  function setTableData(data) {
-    //props.setPageLoader(true);
-    if (data) {
-      // props.setPageLoader(false);
-    }
-    return data ? data : [];
-  }
   const data = details;
   const columns = TableJsonHeaderList[type];
 
@@ -155,19 +139,19 @@ function ReportList(props) {
 
   function DeleteRequest() {
     const deleteId =
-      type == "invoice"
-        ? deleteCurrent?.original?.pos_invoice_no
+      type == "bill"
+        ? deleteCurrent?.original?.pos_invoice_id
         : deleteCurrent?.original[`pos_${type}_code`];
     const conditionKey =
-      type == "invoice" ? "pos_invoice_no" : "pos_" + type + "_code";
+      type == "bill" ? "pos_invoice_id" : "pos_" + type + "_code";
     let deleteData = {
       list_key: "UpdateMaster",
-      tablename: "pos_" + type,
+      tablename: "pos_invoice",
       tablefields: { status: "0" },
       condition: { [conditionKey]: deleteId },
     };
     PostApi(deleteData, '', props)
-      .then((res) => {
+      .then(() => {
         toast.success("Deleted Successfully");
         PostApi(tabledata, '', props).then((res) => {
           let tableresponce = res.responcePostData.data.result;
@@ -182,18 +166,7 @@ function ReportList(props) {
       });
   }
 
-  const ProductPrice = (product) => {
-    return product.product_info[0].attribute_id.find(
-      (o) => o.att_id === product.attribute_id
-    ).price;
-  };
 
-  const ProductWeight = (product) => {
-    return product.product_info[0].attribute_id.find(
-      (o) => o.att_id === product.attribute_id
-    ).att_value;
-    PrintInvoice;
-  };
 
   function DeleteModal() {
     return (
@@ -205,7 +178,7 @@ function ReportList(props) {
             <div className="text-center p-5 flex-auto justify-center">
               <h2 className="text-xl font-bold py-4 ">Are you sure?</h2>
               <p className="text-sm text-gray-500 px-8">
-                Do you really want to delete? This process cannot be undone.
+                Do you really want to delete? This process cannot be undone.sss
               </p>
             </div>
             <div className="p-3 mt-2 text-center space-x-4 md:block">
@@ -300,8 +273,8 @@ function ReportList(props) {
                           ))
                         }
                       </select>
-                      {/* Datepicker built with flatpickr */}
-                      <Datepicker />
+                      {/* Datepicker built with flatpickr */  (JSON.parse(sessionStorage.getItem('details'))[0].pos_user_type === '1') ? 
+                      <Datepicker /> : ''}
                       {/* Add view button */}
                       <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => getReport()}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -346,7 +319,7 @@ function ReportList(props) {
                       className="bg-white divide-y divide-gray-200"
                       {...getTableBodyProps()}
                     >
-                      {page.map((row, i) => {
+                      {page.map((row) => {
                         prepareRow(row);
                         return (
                           <tr {...row.getRowProps()}>
@@ -367,9 +340,8 @@ function ReportList(props) {
                             })}
 
                             <td className="px-6 py-2 whitespace-nowrap text-slate-500 text-sm  flex flex-row">
-                              {type === "invoice" ? (
+                              {type === "bill" ?  row.original.status === '1'  ? (
                                 <>
-                                  {" "}
                                   <ClipboardCheckIcon
                                     height={15}
                                     className=" text-blue-500 cursor-pointer text-left mr-2"
@@ -401,7 +373,7 @@ function ReportList(props) {
                                     value={""}
                                   ></TrashIcon> : ''}
                                 </>
-                              ) : (
+                              ) : '' : (
                                 <>
                                   <div
                                     id={Math.random()}
@@ -457,7 +429,7 @@ function ReportList(props) {
                     <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                       <div>
                         <p className="text-sm text-gray-700">
-                          Showing Page{" "}
+                          Showing Page
                           <span className="font-medium">{pageIndex + 1}</span> of{" "}
                           <span className="font-medium">
                             {pageOptions.length}
@@ -494,7 +466,6 @@ function ReportList(props) {
                               aria-hidden="true"
                             />
                           </div>
-
                           <div
                             onClick={() => nextPage()}
                             disabled={!canNextPage}
@@ -540,4 +511,4 @@ function ReportList(props) {
   );
 }
 
-export default ReportList;
+export default BillReport;

@@ -1,5 +1,6 @@
 import React from "react";
 import svsqr from "../images/svs-qr.png";
+import { UtilsJson } from "../utils/UtilsJson";
 function BillPrintList({ billDetails }) {
   const calculateGST = (value) => {
     let cost = 0;
@@ -31,12 +32,12 @@ function BillPrintList({ billDetails }) {
   return (
     <div className="col-span-full hidden sm:col-span-4 shadow-lg rounded-sm border bg-white border-slate-200 print:block print:border-none print:shadow-none">
       <div className="print:block text-center ">
-        <h1 className="text-md font-bold">Sri Venkateshwara Classic</h1>
+        <h1 className="text-md font-bold"> {UtilsJson.companyname}</h1>
         <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_1},</h4>
           <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_2},</h4>
           <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_city}, India.</h4>
           <p className="text-xs">Phone : +91 {JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_phone}</p>
-        <p className="text-xs">Email : info@srivenkateshwaraclassic.com</p>
+        
       </div>
       <div className="print:block justify-between border-b-2 text-center">
         <p className="text-[10px] font-bold">Bill No :{ billDetails[0]?.pos_invoice_no }</p>
@@ -117,18 +118,18 @@ function BillPrintList({ billDetails }) {
             </span>
           </div>
           <div className="print:flex text-center py-3 flex-col items-center hidden">
-            <p className="text-[10px] text-center mt-3">
+            {/* <p className="text-[10px] text-center mt-3">
               Scan to order us on website
-            </p>
-            <img
+            </p> */}
+            {/* <img
               className="text-center my-1"
               src={svsqr}
               width="75"
               height="75"
               alt="svs-qr"
-            />
+            /> */}
             <p className="text-[10px] text-center my-1 font-bold">
-              www.srivenkateshwaraclassic.com
+              
             </p>
             <p className=" font-bold text-base my-2">
 

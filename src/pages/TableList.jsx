@@ -26,25 +26,6 @@ import toast, { Toaster } from "react-hot-toast";
 import BillList from "./BillList";
 import Header from "../partials/Header";
 import BillPrintList from "./BillPrintList";
-function alpDate(params) {
-  const d = new Date(params);
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "May",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  return monthNames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
-}
 
 function GlobalFilter({
   preGlobalFilteredRows,
@@ -53,9 +34,6 @@ function GlobalFilter({
 }) {
   const count = preGlobalFilteredRows.length;
   const [value, setValue] = React.useState(globalFilter);
-  const onChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 200);
   !JSON.parse(sessionStorage.getItem('details')) ? location.href = '/login' : '';
   return (
     <div className=" text-slate-600">
@@ -95,13 +73,6 @@ function TableList(props) {
     setDeleteCurrent([]);
   }
 
-  function setTableData(data) {
-    //props.setPageLoader(true);
-    if (data) {
-      // props.setPageLoader(false);
-    }
-    return data ? data : [];
-  }
   const data = details;
   const columns = TableJsonHeaderList[type];
 
@@ -148,7 +119,7 @@ function TableList(props) {
       condition: { [conditionKey]: deleteId },
     };
     PostApi(deleteData,'',props)
-      .then((res) => {
+      .then(() => {
         toast.success("Deleted Successfully");
         PostApi(tabledata).then((res) => {
           let tableresponce = res.responcePostData.data.result["pos_" + type];
@@ -163,18 +134,7 @@ function TableList(props) {
       });
   }
 
-  const ProductPrice = (product) => {
-    return product.product_info[0].attribute_id.find(
-      (o) => o.att_id === product.attribute_id
-    ).price;
-  };
 
-  const ProductWeight = (product) => {
-    return product.product_info[0].attribute_id.find(
-      (o) => o.att_id === product.attribute_id
-    ).att_value;
-    PrintInvoice;
-  };
 
   function DeleteModal() {
     return (
@@ -312,7 +272,7 @@ function TableList(props) {
                     className="bg-white divide-y divide-gray-200"
                     {...getTableBodyProps()}
                   >
-                    {page.map((row, i) => {
+                    {page.map((row) => {
                       prepareRow(row);
                       return (
                         <tr {...row.getRowProps()}>

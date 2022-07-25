@@ -13,7 +13,16 @@ import Pos from './pages/Pos';
 import TableList from './pages/TableList';
 import FormFields from './pages/FormFields';
 import LoginPage from './pages/LoginPage';
-import ReportList from './pages/ReportList';
+import BillReport from './partials/report/BillReport';
+import ReportFullList from './partials/report/ReportFullList';
+
+import SalesByMonth from './partials/report/SalesByMonth';
+import SalesByDay from './partials/report/SalesByDay';
+import Top10Count from './partials/report/Top10Count';
+import Low10Count from './partials/report/Low10Count';
+import Top10Amount from './partials/report/Top10Amount';
+import Low10Amount from './partials/report/Low10Amount';
+import NonSelling from './partials/report/NonSelling';
 
 function App() {
   const location = useLocation();
@@ -40,7 +49,16 @@ function App() {
         <Route exact path="/dashboard" element={<Dashboard />} />
         <Route exact path="/pos" element={<Pos pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
         <Route exact path="/list/:type" element={<TableList pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
-        <Route exact path="/report/:type" element={<ReportList pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
+       
+        <Route exact path="/report/list" element={<ReportFullList pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
+        <Route exact path="/report/month" element={<SalesByMonth pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
+        <Route exact path="/report/day" element={<SalesByDay pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
+        <Route exact path="/report/top10count" element={<Top10Count pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
+        <Route exact path="/report/low10count" element={<Low10Count pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
+        <Route exact path="/report/top10amount" element={<Top10Amount pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
+        <Route exact path="/report/low10amount" element={<Low10Amount pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
+        <Route exact path="/report/nonselling" element={<NonSelling pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />  <Route exact path="/report/:type" element={<BillReport pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
+       
         <Route exact path="/list/:type/:id" element={<FormFields pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
         <Route path="/" element={<LoginPage pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />
         <Route path="/*" element={<LoginPage pageLoader={pageLoader} setPageLoader={setPageLoader} pageLoaderCounter={pageLoaderCounter} setPageLoaderCounter={setPageLoaderCounter} pageLoaderCheckCounter={pageLoaderCheckCounter} setPageLoaderCheckCounter={setPageLoaderCheckCounter} />} />

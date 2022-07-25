@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PostApi from '../../Services/PostApi';
 
-function DashboardCard07() {
+function DashboardCard072() {
   const [data, setData] = useState([]);
   var sno = 1;
   useEffect(() => {
-    let data = { "list_key": "ProductHigh" };
+    let data = {"list_key":"ProductpriceHigh"};
     PostApi(data).then((res) => {
       let tableresponce = res.responcePostData.data.result;
       setData(tableresponce);
@@ -15,7 +15,7 @@ function DashboardCard07() {
   return (
     <div className="col-span-full xl:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
       <header className="px-5 py-4 border-b border-slate-100">
-        <h2 className="font-semibold text-slate-800">Top selling product by Count</h2>
+        <h2 className="font-semibold text-slate-800 text-sm">Top selling product by Amount</h2>
       </header>
       <div className="p-3">
 
@@ -53,10 +53,10 @@ function DashboardCard07() {
                       <div className="text-left text-xs">{item.pos_products_name}</div>
                     </td>
                     <td className="p-2">
-                      <div className="text-right  text-xs">₹ {Number(item.amount).toLocaleString('en-IN')}</div>
+                      <div className="text-right  text-xs text-green-500">₹ {Number(item.amount).toLocaleString('en-IN')}</div>
                     </td>
                     <td className="p-2">
-                      <div className="text-right text-green-500">{item.prod_count}</div>
+                      <div className="text-right ">{item.prod_count}</div>
                     </td>
                   </tr>
                 ))}
@@ -70,4 +70,4 @@ function DashboardCard07() {
   );
 }
 
-export default DashboardCard07;
+export default DashboardCard072;

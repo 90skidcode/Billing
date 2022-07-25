@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import svsqr from "../images/svs-qr.png";
 import PostApi from "../services/PostApi";
 import toast, { Toaster } from 'react-hot-toast';
+import { UtilsJson } from "../utils/UtilsJson";
+
+
 function ProductList({ tempproductList, settempproductList, productList }) {
   const [billingList, setbillingList] = useState([]);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -12,21 +15,31 @@ function ProductList({ tempproductList, settempproductList, productList }) {
   const [paymentMode, setpaymentMode] = useState('Cash');
   const [flag, setFlag] = useState(false);
   const [saveFlag, setSaveFlag] = useState(false);
+
+
+
   useEffect(() => {
     setbillingList(billingList);
   }, [inputUpdate]);
 
   function checkAttribute(value) {
     setCurrentProduct(value);
-    if (value.pos_products_attribute.length !== 1) {
+
+    if (checkLength(value.pos_products_attribute) !== 1) {
       setSearchModalOpen(true);
       setTimeout(() => {
         document.getElementById("setFocus").focus();
       }, 0);
-    } else if (value.pos_products_attribute.length === 1) {
+    } else if (checkLength(value.pos_products_attribute) === 1) {
       let v = value.pos_products_attribute[0];
+      setCurrentProduct({ ...value, ['varity_code']: value.pos_products_attribute[0].pos_attribute_code });
       setToCart(value, v?.pos_attribute_name, v?.pos_products_price, v?.pos_attribute_code);
     }
+  }
+
+  const checkLength = (attributes) => {
+    let attr = attributes.filter(i => Number(i.pos_products_price) > 0)
+    return attr.length;
   }
 
   const setToCart = (value, varity, cost, varity_code) => {
@@ -88,12 +101,6 @@ function ProductList({ tempproductList, settempproductList, productList }) {
     ":" +
     ("00" + date.getMinutes()).slice(-2);
 
-  function filterObject(category, id) {
-    if (id) {
-      let obj = category.find((o) => o.code === id);
-      return obj;
-    } else return [];
-  }
 
   const updateValue = (e, item) => {
     const { value } = e.target;
@@ -134,8 +141,29 @@ function ProductList({ tempproductList, settempproductList, productList }) {
   };
 
   useEffect(() => {
-  }, [flag])
+  }, [flag]);
 
+  useEffect(() => {
+    document.addEventListener("keydown", keyEventFn, false);
+    return () => {
+      document.removeEventListener("keydown", keyEventFn, false);
+    };
+  }, []);
+  var keyCode = '';
+  const keyEventFn = useCallback((event) => {
+    if (event.key === "Enter" && keyCode == 'Enter') {
+      //Do whatever when esc is pressed
+      document.getElementById('search').focus();
+    }
+    if (event.key === "F8") {
+      //Do whatever when esc is pressed
+      document.getElementById('save-print').click();
+    }
+    keyCode = event.key;
+  }, []);
+  setInterval(() => {
+    keyCode = ''
+  }, 700);
   const billCheck = (bill) => {
     if (!bill.length)
       return false;
@@ -196,15 +224,17 @@ function ProductList({ tempproductList, settempproductList, productList }) {
       <div className="col-span-full md:col-span-6 shadow-lg rounded-sm border border-slate-200 print:hidden">
         <Toaster position="top-right" reverseOrder={false} />
         <header className="p-1 border-b border-slate-100">
+
           <input
             type="text"
             name=""
-            id=""
+            id="search"
             autoFocus
             placeholder="Search Product Name / Code"
             className="h-8 w-full text-xs uppercase border-slate-200 text-slate-400 bg-slate-50 rounded-sm font-semibold p-2"
             onKeyUp={(e) => searchProduct(e)}
           />
+
         </header>
         <div className="grow">
           <div className="grow items-center border border-slate-100 text-xs p-2 no-scrollbar overflow-y-auto h-[90vh]">
@@ -267,12 +297,11 @@ function ProductList({ tempproductList, settempproductList, productList }) {
       </div>
       <div className="col-span-full sm:col-span-4 shadow-lg rounded-sm border bg-white border-slate-200 print:block print:border-none print:shadow-none">
         <div className="print:block text-center hidden">
-          <h1 className="text-md font-bold">Sri Venkateshwara Classic</h1>
+          <h1 className="text-md font-bold"> {UtilsJson.companyname}</h1>
           <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_1},</h4>
           <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_2},</h4>
-          <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_city}, India.</h4>
+          <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_city}</h4>
           <p className="text-xs">Phone : +91 {JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_phone}</p>
-          <p className="text-xs">Email : info@srivenkateshwaraclassic.com</p>
         </div>
         <div className="print:block hidden justify-between border-b-2 text-center">
           <p className="text-[10px] font-bold">Bill No : {billNo}</p>
@@ -316,19 +345,6 @@ function ProductList({ tempproductList, settempproductList, productList }) {
                       </td>
                       <td className="p-2 print:border-slate-200  print:border-none print:p-0 print:text-[10px]">
                         <div className="text-center text-black font-bold">
-                          {
-                            console.log(currentProduct.pos_products_code === key.code &&
-                              currentProduct.varity_code === key.varity_code)
-                          }
-                          {
-                            console.log('====================================')
-                          }
-                          {
-                            console.log(currentProduct.pos_products_code, '   ', key.code, '  varity_code ',
-                              currentProduct.varity_code, key.varity_code, currentProduct)
-                          }{
-                            console.log('====================================')
-                          }
 
                           <input
                             type="number"
@@ -405,7 +421,7 @@ function ProductList({ tempproductList, settempproductList, productList }) {
                 alt="svs-qr"
               />
               <p className="text-[10px] text-center my-1 font-bold">
-                www.srivenkateshwaraclassic.com
+                
               </p> */}
               <p className=" font-bold text-base my-2">
                 Thank You Vist Again !!
@@ -426,15 +442,15 @@ function ProductList({ tempproductList, settempproductList, productList }) {
               </button>
             </div>
             <div className={`flex justify-between print:hidden ${saveFlag ? 'pointer-events-none' : ''}`}>
-              <button onClick={() => saveBill(false)} className="btn border-slate-200 bg-green-300 hover:border-slate-800 text-black w-full">
-                Save
-              </button>
               <button
-                onClick={() => saveBill(true)}
+                onClick={() => saveBill(true)} id="save-print"
                 className="btn border-slate-200 hover:border-slate-800 bg-yellow-200 text-black w-full"
               >
-                Save & Print
+                Save & Print (F8)
               </button>
+              {/* <button onClick={() => saveBill(false)} className="btn border-slate-200 bg-green-300 hover:border-slate-800 text-black w-full">
+                Save
+              </button> */}
               <button className="btn border-slate-200 hover:border-slate-800 bg-red-300 text-black w-full " onClick={() => setbillingList([])}>
                 Clear
               </button>

@@ -119,7 +119,7 @@ export const TableJsonHeaderList = {
         </span>
       ) : (
         <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-          Cancelled 
+          Deleted 
         </span>
       ),
   }],
@@ -147,7 +147,7 @@ export const TableJsonHeaderList = {
         </span>
       ) : (
         <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-          Cancelled 
+          Deleted 
         </span>
       ),
   }]

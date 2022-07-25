@@ -1,6 +1,7 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import PostApi from "../Services/PostApi";
+import { UtilsJson } from "../utils/UtilsJson";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 export default function LoginPage(props) {
@@ -40,7 +41,7 @@ export default function LoginPage(props) {
         <div className="max-w-md w-full p-10 bg-slate-100 space-y-8 rounded-sm">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              POS Chendur
+              {UtilsJson.companyname}
             </h2>
           </div>
           <form
