@@ -56,18 +56,23 @@ function BillReport(props) {
   const [open, setOpen] = useState(false);
   const [billDetails, setbillDetails] = useState([]);
   const [fullbillDetails, setFullbillDetails] = useState([]);
+  const [category, setCategory] = useState([]);
   const [details, setDetails] = useState([]);
-  let tabledata = { "list_key": "ReportMaster", "range": "Daywise" };
+  let tabledata = { "list_key": type === 'productreport' ? 'CatAllReport' : "ReportMaster", "range": "Daywise" };
   useEffect(() => {
     setDetails([]);
     PostApi(tabledata, '', props).then((res) => {
       let tableresponce = res.responcePostData.data.result;
       setDetails(tableresponce);
     });
+    PostApi({ "list_key": "Mastertable", "mastertables": "pos_category" }, '').then((res) => {
+      let tableresponce = res.responcePostData.data.result.pos_category;
+      setCategory(tableresponce);
+    });
   }, [type]);
 
   var filterList = [{ name: 'Daywise', value: 'Daywise' }];
-  if(JSON.parse(sessionStorage.getItem('details'))[0].pos_user_type === '1')
+  if (JSON.parse(sessionStorage.getItem('details'))[0].pos_user_type === '1')
     filterList = [{ name: 'Daywise', value: 'Daywise' }, { name: 'Weekwise', value: 'Weekwise' }, { name: 'Monthwise', value: 'Monthwise' }, { name: 'Yearwise', value: 'Yearwise' }, { name: 'Between', value: 'Between' }]
   function formatDate(date) {
     var d = new Date(date),
@@ -83,12 +88,15 @@ function BillReport(props) {
 
   const getReport = () => {
     let v = document.getElementById('range').value;
-    var tabledata = { "list_key": "ReportMaster", "range": v };
+    var tabledata = { "list_key": type === 'productreport' ? 'CatAllReport' : "ReportMaster", "range": v };
     if (v === 'Between') {
       let t = document.getElementById('date-range').value;
       t = t.split('to');
       tabledata['from_date'] = formatDate(t[0]);
       tabledata['to_date'] = formatDate(t[1] ? t[1] : t[0]);
+    }
+    if (type === 'productreport' && document.getElementById('category').value != 'All') {
+      tabledata['cat_id'] = document.getElementById('category').value;
     }
     setDetails([]);
     PostApi(tabledata, '', props).then((res) => {
@@ -100,6 +108,7 @@ function BillReport(props) {
   const [ModalPopUpFlag, setModalPopUpFlag] = useState("hidden");
   const [ModalPopUpInvoiceFlag, setModalPopUpInvoiceFlag] = useState("hidden");
   const [deleteCurrent, setDeleteCurrent] = useState();
+  const [flag, setFlag] = useState(false);
   function ClosePopUp() {
     setModalPopUpFlag("hidden");
     setDeleteCurrent([]);
@@ -231,7 +240,6 @@ function BillReport(props) {
     );
   }
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   return (
     <div className="flex overflow-y-hidden">
       <Toaster position="top-right" reverseOrder={false} />
@@ -246,14 +254,14 @@ function BillReport(props) {
             <div className="col-span-12 sm:col-span-10 print:hidden m-5">
               <div className="flex justify-between flex-wrap">
                 <div className="text-primary-900 text-3xl font-bold capitalize">
-                  <h1>{type} ✨ </h1>
+                  <h1>{type === 'productreport' ? 'Product Report' : type} ✨ </h1>
                 </div>
               </div>
               <div className="grid grid-cols-12 gap-6">
-                <div className="col-span-9 bg-white shadow-lg rounded-sm border border-gray-200 mt-0 overflow-auto">
+                <div className={`bg-white shadow-lg rounded-sm border border-gray-200 mt-0 overflow-auto ${type === 'productreport' ? 'col-span-12' : 'col-span-9'}`}>
                   <header className="px-5 py-4 border-b border-gray-100 p-4 flex flex-wrap justify-between ">
                     <h2 className="text-gray-800 text-base font-semibold justify-items-start capitalize">
-                      All {type}
+                      {type === 'productreport' ? 'Product Report' : 'All ' + type}
                       <span className="text-base font-semibold text-slate-500">
                         {" - " + data.length}
                       </span>
@@ -265,16 +273,26 @@ function BillReport(props) {
                     />
                     {/* Right: Actions */}
                     <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                      {/* Category Filter */ type === 'productreport' ?
+                        <select className="form-input pl-2 text-slate-500 hover:text-slate-600 font-medium focus:border-slate-300" name="category" id="category" >
+                          <option value="All" key="All">All</option>
+                          {
+                            category.map((e) => (
+                              <option value={e.pos_category_code} key={e.pos_category_code}>{e.pos_category_name}</option>
+                            ))
+                          }
+                        </select> : ''
+                      }
                       {/* Filter button */}
-                      <select className="form-input pl-2 text-slate-500 hover:text-slate-600 font-medium focus:border-slate-300" name="range" id="range">
+                      <select className="form-input pl-2 text-slate-500 hover:text-slate-600 font-medium focus:border-slate-300" name="range" id="range" onChange={(e) => { (e.target.value == 'Between') ? setFlag(true) : setFlag(false) }}>
                         {
                           filterList.map((e) => (
                             <option value={e.value} key={e.value}>{e.name}</option>
                           ))
                         }
                       </select>
-                      {/* Datepicker built with flatpickr */  (JSON.parse(sessionStorage.getItem('details'))[0].pos_user_type === '1') ? 
-                      <Datepicker /> : ''}
+                      {/* Datepicker built with flatpickr */  (JSON.parse(sessionStorage.getItem('details'))[0].pos_user_type === '1' && flag) ?
+                        <Datepicker /> : ''}
                       {/* Add view button */}
                       <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => getReport()}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -309,9 +327,11 @@ function BillReport(props) {
                               </span>
                             </th>
                           ))}
-                          <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                            Action
-                          </th>
+                          {type !== 'productreport' ?
+                            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
+                              Action
+                            </th> : ''
+                          }
                         </tr>
                       ))}
                     </thead>
@@ -339,8 +359,8 @@ function BillReport(props) {
                               );
                             })}
 
-                            <td className="px-6 py-2 whitespace-nowrap text-slate-500 text-sm  flex flex-row">
-                              {type === "bill" ?  row.original.status === '1'  ? (
+                            {type !== "productreport" ? <td className="px-6 py-2 whitespace-nowrap text-slate-500 text-sm  flex flex-row">
+                              {type === "bill" ? row.original.status === '1' ? (
                                 <>
                                   <ClipboardCheckIcon
                                     height={15}
@@ -401,7 +421,8 @@ function BillReport(props) {
                                   ></TrashIcon>
                                 </>
                               )}
-                            </td>
+                            </td> : ''
+                            }
                           </tr>
                         );
                       })}
@@ -495,7 +516,9 @@ function BillReport(props) {
                     </div>
                   </div>
                 </div>
-                <DashboardCard14 details={details} />
+                {type === 'productreport' ? '' :
+                  <DashboardCard14 details={details} />
+                }
               </div>
             </div>
             <DeleteModal></DeleteModal>

@@ -14,19 +14,19 @@ export const TableJsonHeaderList = {
       Header: "Visible",
       accessor: "status",
       Cell: ({ cell }) =>
-      cell.row.values.status === '1' ? (
+        cell.row.values.status === '1' ? (
           <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-green-600 rounded-full">
             Visible
           </span>
         ) : (
           <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-            Deleted 
+            Deleted
           </span>
         ),
     }
-  
+
   ],
-  
+
   products: [
     {
       Header: "Name",
@@ -52,7 +52,7 @@ export const TableJsonHeaderList = {
       Header: "Status",
       accessor: "status",
       Cell: ({ cell }) =>
-      cell.row.values.status === '1' ? (
+        cell.row.values.status === '1' ? (
           <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-green-600 rounded-full">
             Active
           </span>
@@ -62,9 +62,9 @@ export const TableJsonHeaderList = {
           </span>
         ),
     },
-  ], 
-  
-  attribute : [ {
+  ],
+
+  attribute: [{
     Header: "Name",
     accessor: "pos_attribute_name",
     className:
@@ -74,7 +74,7 @@ export const TableJsonHeaderList = {
     Header: "Code",
     accessor: "pos_attribute_code",
   }],
-  user : [{
+  user: [{
     Header: "Name",
     accessor: "pos_user_name",
     className:
@@ -83,21 +83,21 @@ export const TableJsonHeaderList = {
   {
     Header: "Code",
     accessor: "pos_user_code",
-  },{
+  }, {
     Header: "Type",
     accessor: "pos_user_type",
     Cell: ({ cell }) =>
-    cell.row.values.pos_user_type === '1' ? (
+      cell.row.values.pos_user_type === '1' ? (
         <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-green-600 rounded-full">
           Admin
         </span>
       ) : (
         <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-yellow-600 rounded-full">
-          User 
+          User
         </span>
       ),
   }],
-  invoice : [{
+  invoice: [{
     Header: "Bill No",
     accessor: "pos_invoice_no",
     className:
@@ -105,28 +105,28 @@ export const TableJsonHeaderList = {
   },
   {
     Header: "Date",
-    accessor: "created_at",    
-  },{
+    accessor: "created_at",
+  }, {
     Header: "Amount",
     accessor: "pos_invoice_amount",
-  },{
+  }, {
     Header: "Status",
     accessor: "status",
     Cell: ({ cell }) =>
-    cell.row.values.status === '1' ? (
+      cell.row.values.status === '1' ? (
         <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-green-600 rounded-full">
           Paid
         </span>
       ) : (
         <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-          Deleted 
+          Deleted
         </span>
       ),
   }],
-  bill:[{
+  bill: [{
     Header: "Date",
     accessor: "created_at",
-    
+
   },
   {
     Header: "Bill No",
@@ -141,15 +141,32 @@ export const TableJsonHeaderList = {
     Header: "Status",
     accessor: "status",
     Cell: ({ cell }) =>
-    cell.row.values.status === '1' ? (
+      cell.row.values.status === '1' ? (
         <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-green-600 rounded-full">
           Paid
         </span>
       ) : (
         <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-          Deleted 
+          Deleted
         </span>
       ),
+  }], productreport: [{
+    Header: "Name",
+    accessor: "pos_products_name"
+  }, {
+    Header: "Quantity",
+    accessor: "quantity",
+    Cell: ({ cell }) =>
+    (
+      Number(Number(cell.row.values.quantity).toFixed(2)).toLocaleString('en-IN')
+    )
+  }, {
+    Header: "Amount",
+    accessor: "amount",
+    Cell: ({ cell }) =>
+    (
+      Number(Number(cell.row.values.amount).toFixed(2)).toLocaleString('en-IN')
+    )
   }]
- 
+
 };

@@ -23,9 +23,7 @@ function SalesByDay() {
       setChartLabel(label);
     })
   }
-console.log('==============chartLabel======================');
-console.log(chartLabel);
-console.log('====================================');
+
   useEffect(() => {
     getMonthData('01');
   }, [])

@@ -79,14 +79,6 @@ function DashboardCard01(props) {
     
   }
 
-  useEffect(() => {
-    let   data = {"list_key":"Commonreport","range":"Daywise","month_val":"6","year_val":"2022"};
-    PostApi(data).then((res) => {
-      console.log('====================================');
-      console.log(res);
-      console.log('====================================');
-    });
-  }, [flag]);
   return (
     <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-3 bg-white shadow-lg rounded-sm border border-slate-200">
       <div className="px-5 pt-5">
