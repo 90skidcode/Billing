@@ -299,4 +299,44 @@ export const FormFieldJson = {
       ],
     },
   ],
+  tax: [
+    {
+      type: "text",
+      title: "Name",
+      name: "pos_tax_name",
+      values: "",
+      class: "col-span-3",
+      require: true,
+    },
+    {
+      type: "text",
+      title: "Name",
+      name: "pos_tax_percentage",
+      values: "",
+      class: "col-span-3",
+      require: true,
+    }, {
+      type: "select",
+      title: "Visible",
+      name: "status",
+      values: "",
+      class: "col-span-3",
+      require: false,
+      server: false,
+      list: [
+        {
+          key: "1",
+          value: "Active",
+        },
+        {
+          key: "2",
+          value: "In Active",
+        },
+        {
+          key: "0",
+          value: "Delete",
+        },
+      ],
+    },
+  ]
 };

@@ -5,17 +5,17 @@ function BillPrintList({ billDetails }) {
   const calculateGST = (value) => {
     let cost = 0;
     value.forEach((element) => {
-      cost += element.pos_bill_price * element.pos_bill_quantity;
+      cost += Number(element.pos_bill_price);
     });
-    return ((cost / 100) * 2.5).toFixed(2);
+    return ((cost / 100) * UtilsJson.cgst).toFixed(2);
   };
 
   const calculateBill = (value) => {
     let cost = 0;
     value.forEach((element) => {
-      cost += element.pos_bill_price * element.pos_bill_quantity;
+      cost += Number(element.pos_bill_price);
     });
-    return Math.round((cost / 100) * 5 + cost);
+    return Math.round((cost / 100) * (UtilsJson.cgst + UtilsJson.sgst) + cost);
   };
   const dateStr = () => {
     var date = new Date();
@@ -34,14 +34,14 @@ function BillPrintList({ billDetails }) {
       <div className="print:block text-center ">
         <h1 className="text-md font-bold"> {UtilsJson.companyname}</h1>
         <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_1},</h4>
-          <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_2},</h4>
-          <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_city}, India.</h4>
-          <p className="text-xs">Phone : +91 {JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_phone}</p>
-        
+        <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_2},</h4>
+        <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_city}, India.</h4>
+        <p className="text-xs">Phone : +91 {JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_phone}</p>
+
       </div>
       <div className="print:block justify-between border-b-2 text-center">
-        <p className="text-[10px] font-bold">Bill No :{ billDetails[0]?.pos_invoice_no }</p>
-        <p className="text-[10px] font-bold">Date : { dateStr() }</p>
+        <p className="text-[10px] font-bold">Bill No :{billDetails[0]?.pos_invoice_no}</p>
+        <p className="text-[10px] font-bold">Date : {dateStr()}</p>
       </div>
       <div className="items-center border border-slate-100 text-xs p-2 flex flex-col  print:h-auto print:p-0 print:text-[10px] print:border-0 justify-between">
         {/* Table */}
@@ -103,14 +103,15 @@ function BillPrintList({ billDetails }) {
           </table>
         </div>
         <div className="flex flex-col justify-between text-right w-full">
-          <div className="border-t border-slate-200 flex py-2 justify-between">
-            <span>CGST (2.5%)</span>
+          {UtilsJson.cgst ? <div className="border-t border-slate-200 flex py-2 justify-between">
+            <span>CGST ({UtilsJson.cgst}%)</span>
             <span>Rs.{calculateGST(billDetails)}</span>
           </div>
-          <div className="border-t border-slate-200 flex py-2 justify-between">
-            <span>SGST (2.5%)</span>
+            : ''}
+          {UtilsJson.cgst ? <div className="border-t border-slate-200 flex py-2 justify-between">
+            <span>SGST ({UtilsJson.cgst}%)</span>
             <span>Rs.{calculateGST(billDetails)}</span>
-          </div>
+          </div> : ''}
           <div className="border-t border-b border-slate-200 flex py-2 justify-between">
             <span>Total due (including taxes)</span>
             <span className=" text-green-600 print:text-black text-sm font-bold">
@@ -129,7 +130,7 @@ function BillPrintList({ billDetails }) {
               alt="svs-qr"
             /> */}
             <p className="text-[10px] text-center my-1 font-bold">
-              
+
             </p>
             <p className=" font-bold text-base my-2">
 

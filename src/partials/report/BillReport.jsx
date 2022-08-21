@@ -220,6 +220,7 @@ function BillReport(props) {
             <BillList
               setModalPopUpInvoiceFlag={setModalPopUpInvoiceFlag}
               billDetails={billDetails}
+              fullbillDetails={fullbillDetails}
             ></BillList>
           </div>
         </div>
@@ -384,7 +385,7 @@ function BillReport(props) {
                                       )
                                     }
                                   ></PrinterIcon>
-                                  {(document.getElementById('range').value == 'Daywise') ? <TrashIcon
+                                  {((document.getElementById('range').value == 'Daywise') && (JSON.parse(sessionStorage.getItem('details'))[0].pos_user_type === '1')) ? <TrashIcon
                                     height={15}
                                     className=" text-red-500 cursor-pointer text-left"
                                     onClick={() => {

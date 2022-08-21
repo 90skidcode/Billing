@@ -11,12 +11,16 @@ function CategoryList() {
         name: 'Bill Report',
         link: '/report/bill',
         desc: 'Bill report based on Daywise, Weekwise, Monthwise, Yearwise, Range betweent Days & Summary result of all report. Represent with Table.'
+      }, {
+        name: 'Product Report',
+        link: '/report/productreport',
+        desc: 'Product report based on Daywise, Weekwise, Monthwise, Yearwise, Range betweent Days. Represent with Table.'
       }]) : setBillReport([
         {
           name: 'Bill Report',
           link: '/report/bill',
           desc: 'Bill report based on Daywise, Weekwise, Monthwise, Yearwise, Range betweent Days & Summary result of all report. Represent with Table.'
-        },{
+        }, {
           name: 'Product Report',
           link: '/report/productreport',
           desc: 'Product report based on Daywise, Weekwise, Monthwise, Yearwise, Range betweent Days. Represent with Table.'

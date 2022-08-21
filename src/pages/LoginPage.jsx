@@ -29,6 +29,10 @@ export default function LoginPage(props) {
           "branch",
           JSON.stringify(e.responcePostData.data.branch_result)
         );
+        sessionStorage.setItem(
+          "tax",
+          JSON.stringify(e.responcePostData.data.tax_result)
+        );
         navigate("dashboard");
       }
     });

@@ -1,4 +1,3 @@
-import { UtilsJson } from "../utils/UtilsJson";
 export const TableJsonHeaderList = {
   category: [
     {
@@ -26,7 +25,6 @@ export const TableJsonHeaderList = {
     }
 
   ],
-
   products: [
     {
       Header: "Name",
@@ -167,6 +165,24 @@ export const TableJsonHeaderList = {
     (
       Number(Number(cell.row.values.amount).toFixed(2)).toLocaleString('en-IN')
     )
+  }],tax: [{
+    Header: "Name",
+    accessor: "pos_tax_name"
+  }, {
+    Header: "Percentage",
+    accessor: "pos_tax_percentage"
+  },{
+    Header: "Status",
+    accessor: "status",
+    Cell: ({ cell }) =>
+      cell.row.values.status === '1' ? (
+        <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-green-600 rounded-full">
+          Active
+        </span>
+      ) : (
+        <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+          In Active
+        </span>
+      ),
   }]
-
 };

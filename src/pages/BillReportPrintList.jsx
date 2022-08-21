@@ -2,21 +2,7 @@ import React from "react";
 import svsqr from "../images/svs-qr.png";
 import { UtilsJson } from "../utils/UtilsJson";
 function BillReportPrintList({ billDetails, fullbillDetails }) {
-  const calculateGST = (value) => {
-    let cost = 0;
-    value?.forEach((element) => {
-      cost += Number(element.pos_bill_price);
-    });
-    return Math.round(Number((cost / 100) * 2.5));
-  };
 
-  const calculateBill = (value) => {
-    let cost = 0;
-    value.forEach((element) => {
-      cost += Number(element.pos_bill_price);
-    });
-    return Math.round(Number(((cost / 100) * 5) + cost));
-  };
   const dateStr = () => {
     var date = new Date();
     return ("00" + (date.getMonth() + 1)).slice(-2) +
@@ -34,13 +20,12 @@ function BillReportPrintList({ billDetails, fullbillDetails }) {
       <div className="print:block text-center ">
         <h1 className="text-md font-bold"> {UtilsJson.companyname}</h1>
         <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_1},</h4>
-          <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_2},</h4>
-          <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_city}, India.</h4>
-          <p className="text-xs">Phone : +91 {JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_phone}</p>
-        
+        <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_address_2},</h4>
+        <h4 className="text-xs">{JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_city}, India.</h4>
+        <p className="text-xs">Phone : +91 {JSON.parse(sessionStorage.getItem('branch'))[0]?.pos_branch_phone}</p>
       </div>
       <div className="print:block justify-between border-b-2 text-center">
-        <p className="text-[10px] font-bold">Bill No :{ fullbillDetails[0]?.pos_invoice_no }</p>
+        <p className="text-[10px] font-bold">Bill No :{fullbillDetails[0]?.pos_invoice_no}</p>
         {/* <p className="text-[10px] font-bold">Date : { dateStr() }</p> */}
       </div>
       <div className="items-center border border-slate-100 text-xs p-2 flex flex-col  print:h-auto print:p-0 print:text-[10px] print:border-0 justify-between">
@@ -85,7 +70,6 @@ function BillReportPrintList({ billDetails, fullbillDetails }) {
                           name={key.name}
                           data-code={key.code}
                           readOnly
-
                           value={key.pos_bill_quantity}
                           className="h-6 w-10 text-xs text-center uppercase print:border-none border-slate-200 text-slate-400 bg-slate-50 print:bg-slate-400 rounded-sm font-semibold p-2"
                         />
@@ -103,18 +87,18 @@ function BillReportPrintList({ billDetails, fullbillDetails }) {
           </table>
         </div>
         <div className="flex flex-col justify-between text-right w-full">
-          <div className="border-t border-slate-200 flex py-2 justify-between">
-            <span>CGST (2.5%)</span>
-            <span>Rs.{calculateGST(billDetails)}</span>
-          </div>
-          <div className="border-t border-slate-200 flex py-2 justify-between">
-            <span>SGST (2.5%)</span>
-            <span>Rs.{calculateGST(billDetails)}</span>
-          </div>
+          {
+            fullbillDetails[0]?.pos_invoice_tax ? Object.entries(fullbillDetails[0]?.pos_invoice_tax).map((name, value) => (
+              <div key={value} className="border-t border-slate-200 flex py-2 justify-between">
+                <span>{name[0]} ({fullbillDetails[0]?.pos_invoice_tax_percentage[name[0]]}%)</span>
+                <span>Rs.{name[1]}</span>
+              </div>
+            )) : ''
+          }
           <div className="border-t border-b border-slate-200 flex py-2 justify-between">
-            <span>Total due (including taxes)</span>
+            <span>Total Amount (including taxes)</span>
             <span className=" text-green-600 print:text-black text-sm font-bold">
-              Rs.{calculateBill(billDetails)}
+              Rs.{fullbillDetails[0]?.pos_invoice_amount}
             </span>
           </div>
           <div className="print:flex text-center py-3 flex-col items-center hidden">
@@ -129,7 +113,7 @@ function BillReportPrintList({ billDetails, fullbillDetails }) {
               alt="svs-qr"
             /> */}
             <p className="text-[10px] text-center my-1 font-bold">
-              
+
             </p>
             <p className=" font-bold text-base my-2">
 

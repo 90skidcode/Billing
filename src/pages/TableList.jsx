@@ -295,7 +295,6 @@ function TableList(props) {
                           <td className="px-6 py-2 whitespace-nowrap text-slate-500 text-sm  flex flex-row">
                             {type === "invoice" ? (
                               <>
-                                {" "}
                                 <ClipboardCheckIcon
                                   height={15}
                                   className=" text-blue-500 cursor-pointer text-left mr-2"
@@ -349,7 +348,7 @@ function TableList(props) {
                                   height={15}
                                   className=" text-red-500 cursor-pointer text-left"
                                   onClick={() => {
-                                    DeleteData(row, flase);
+                                    DeleteData(row, false);
                                   }}
                                   value={""}
                                 ></TrashIcon>

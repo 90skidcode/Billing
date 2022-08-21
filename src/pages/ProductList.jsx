@@ -111,20 +111,21 @@ function ProductList({ tempproductList, settempproductList, productList }) {
     setinputUpdate(inputUpdate ? false : true);
   };
 
-  const calculateGST = (value) => {
+  const calculateTax = (item,value) => {
     let cost = 0;
     value.forEach((element) => {
-      cost += Number(element.cost) * Number(element.quantity);
+      cost += Number(element.cost);
     });
-    return ((cost / 100) * 2.5).toFixed(2);
+    return ((cost / 100) * Number(item.pos_tax_percentage)).toFixed(2);
   };
 
   const calculateBill = (value) => {
     let cost = 0;
+    let tax = JSON.parse(sessionStorage.getItem('tax')).map((item)=>Number(item.pos_tax_percentage)).reduce((partialSum, a) => partialSum + a, 0);
     value.forEach((element) => {
       cost += Number(element.cost) * Number(element.quantity);
     });
-    return Math.round((cost / 100) * 5 + cost);
+    return Math.round(((cost / 100) * tax) + cost);
   };
 
   const searchProduct = (e) => {
@@ -179,15 +180,16 @@ function ProductList({ tempproductList, settempproductList, productList }) {
       if (paymentMode) {
         let data = {
           list_key: "AddBill",
-          tax_percentage: { cgst: "2.5", sgst: "2.5" },
-          tax_amount: {
-            cgst: calculateGST(billingList),
-            sgst: calculateGST(billingList),
-          },
+          tax_percentage: {},
+          tax_amount: {},
           inv_amount: calculateBill(billingList),
           tablefields: [],
           payment_mode: paymentMode
-        };
+        };      
+        JSON.parse(sessionStorage.getItem('tax')).forEach((item)=>{
+          data['tax_percentage'][item.pos_tax_name] = item.pos_tax_percentage;
+          data['tax_amount'][item.pos_tax_name] = calculateTax(item,billingList);
+        });
         billingList.forEach((e) => {
           data.tablefields.push({
             pos_bill_products: e.code,
@@ -395,14 +397,15 @@ function ProductList({ tempproductList, settempproductList, productList }) {
             </table>
           </div>
           <div className="flex flex-col justify-between text-right w-full">
-            <div className="border-t border-slate-200 flex py-2 justify-between">
-              <span>CGST (2.5%)</span>
-              <span>Rs.{calculateGST(billingList)}</span>
-            </div>
-            <div className="border-t border-slate-200 flex py-2 justify-between">
-              <span>SGST (2.5%)</span>
-              <span>Rs.{calculateGST(billingList)}</span>
-            </div>
+            {
+              JSON.parse(sessionStorage.getItem('tax')).map((item,i) => (
+                item.status === '1' ? <div key={i} className="border-t border-slate-200 flex py-2 justify-between">
+                  <span>{item.pos_tax_name} ({item.pos_tax_percentage}%)</span>
+                  <span>Rs.{calculateTax(item,billingList)}</span>
+                </div>
+                  : ''
+              ))
+            }           
             <div className="border-t print:border-b border-slate-200 flex py-2 justify-between">
               <span>Total due (including taxes)</span>
               <span className=" text-green-600 print:text-black text-sm font-bold">
