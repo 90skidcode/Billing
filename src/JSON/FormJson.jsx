@@ -327,11 +327,7 @@ export const FormFieldJson = {
         {
           key: "1",
           value: "Active",
-        },
-        {
-          key: "2",
-          value: "In Active",
-        },
+        },        
         {
           key: "0",
           value: "Delete",

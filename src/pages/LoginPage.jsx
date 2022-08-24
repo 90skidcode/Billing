@@ -31,7 +31,7 @@ export default function LoginPage(props) {
         );
         sessionStorage.setItem(
           "tax",
-          JSON.stringify(e.responcePostData.data.tax_result)
+          JSON.stringify(e.responcePostData.data.tax_result ?? [])
         );
         navigate("dashboard");
       }

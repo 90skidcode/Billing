@@ -274,7 +274,10 @@ function BillReport(props) {
                     />
                     {/* Right: Actions */}
                     <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                      
                       {/* Category Filter */ type === 'productreport' ?
+                        <>
+                        <p className="px-5 py-1 text-xl"> Total -  <b className="text-green-700">Rs.{((details.reduce((accum,item) => accum + Number(item.amount), 0)).toFixed(2))} <i className="text-xs">(GST Not Included)</i></b></p> 
                         <select className="form-input pl-2 text-slate-500 hover:text-slate-600 font-medium focus:border-slate-300" name="category" id="category" >
                           <option value="All" key="All">All</option>
                           {
@@ -282,7 +285,7 @@ function BillReport(props) {
                               <option value={e.pos_category_code} key={e.pos_category_code}>{e.pos_category_name}</option>
                             ))
                           }
-                        </select> : ''
+                        </select> </>: ''
                       }
                       {/* Filter button */}
                       <select className="form-input pl-2 text-slate-500 hover:text-slate-600 font-medium focus:border-slate-300" name="range" id="range" onChange={(e) => { (e.target.value == 'Between') ? setFlag(true) : setFlag(false) }}>
